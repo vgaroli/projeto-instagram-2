@@ -1,0 +1,20 @@
+{
+  "name": "instagram-top-videos-download-mcp",
+  "version": "1.0.0",
+  "description": "MCP server that reads a CSV of an Instagram account's videos, sorts by likes, resolves each video URL via the public web GraphQL (no auth) and downloads the top N most liked videos.",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "instagram-top-videos-download-mcp": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^4.4.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

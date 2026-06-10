@@ -1,0 +1,23 @@
+# Credenciais — nunca commitar
+workspace-key.json
+.env
+
+# Mídia binária baixada do Instagram (vídeos, imagens, thumbnails)
+resources/videos/**/*.mp4
+resources/videos/**/*.mov
+resources/videos/**/*.jpg
+resources/videos/**/*.jpeg
+resources/videos/**/*.png
+resources/videos/**/*.webp
+resources/posts/**/*.mp4
+resources/posts/**/*.mov
+resources/posts/**/*.jpg
+resources/posts/**/*.jpeg
+resources/posts/**/*.png
+resources/posts/**/*.webp
+
+# Arquivos de sistema
+.DS_Store
+
+# Node
+node_modules/
