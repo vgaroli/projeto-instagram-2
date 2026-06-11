@@ -16,14 +16,26 @@
 
 ---
 
+## Periodicidade
+
+Coleta e relatório têm ritmos diferentes — não rode tudo com a mesma frequência:
+
+- **Fase 1 (coleta) — semanal.** O MCP `instagram-posts` faz merge por `shortcode`: posts já coletados não são perdidos quando saem da janela de 30 dias, e o `historico-seguidores.csv` ganha um novo snapshot a cada execução. Rodar toda semana é barato e mantém o engajamento dos posts recentes atualizado enquanto eles ainda estão "maturando" (ganhando likes/comments).
+- **Fases 2-5 (relatório completo) — mensal, ou quando houver ~15+ posts novos** desde a última geração. Ganchos, vocabulário, storytelling e o perfil consolidado não mudam de uma semana para outra — regenerar com quase os mesmos posts é redundante. Antes de rodar, compare a contagem atual de linhas em `lista.csv` com a do último `perfil-escola-{{SLUG}}.md` para decidir se já vale a pena.
+
+Ajuste esses números com o tempo conforme observarmos o ritmo real de postagem de cada escola.
+
+---
+
 ## Tarefas
 
-### Fase 1: coleta de dados
+### Fase 1: coleta de dados (rodar semanalmente)
 
 - [ ] Coletar todos os posts dos últimos 30 dias usando o MCP `resources/mcps/instagram-posts`
   - Conta: `{{CONTA}}`
-  - O MCP salva automaticamente `resources/posts/{{SLUG}}/lista.csv` e `perfil.json`
+  - O MCP salva automaticamente `resources/posts/{{SLUG}}/lista.csv`, `perfil.json` e acrescenta um registro em `historico-seguidores.csv`
   - Verificar: número de posts coletados, seguidores registrados no `perfil.json`
+  - O `historico-seguidores.csv` acumula um snapshot de seguidores por data de coleta — útil em análises futuras para acompanhar a evolução do alcance da conta
 
 - [ ] Para os posts do tipo `video`, baixar os arquivos usando o MCP `resources/mcps/instagram-top-videos-download`
   - CSV de entrada: `resources/posts/{{SLUG}}/lista.csv`
@@ -34,7 +46,7 @@
   - Pasta: `resources/posts/{{SLUG}}/videos/`
   - Saída: arquivos `.txt` ao lado de cada `.mp4`
 
-### Fase 2: análise de engajamento
+### Fase 2: análise de engajamento (rodar mensalmente, ou a cada ~15+ posts novos)
 
 - [ ] Executar a skill `.claude/skills/ig-analise-engajamento` com a pasta `resources/posts/{{SLUG}}/`
   - Lê `lista.csv` + `perfil.json`
@@ -70,4 +82,4 @@
   - `schoolId`: `{{SCHOOL_ID}}`
   - `accountName`: `{{CONTA}}`
   - `pastaAnalise`: caminho absoluto de `resources/posts/{{SLUG}}/`
-  - Confirmar: documento criado em `socialMediaAnalyses/{docId}`
+  - Confirmar: documento criado em `escolas/{{SCHOOL_ID}}/socialMediaAnalyses/{docId}`

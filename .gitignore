@@ -1,5 +1,6 @@
 # Credenciais — nunca commitar
 workspace-key.json
+workspace-key-*.json
 .env
 
 # Mídia binária baixada do Instagram (vídeos, imagens, thumbnails)

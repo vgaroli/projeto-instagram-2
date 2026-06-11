@@ -254,6 +254,14 @@ async function collectViaGraphql({
   const posts = [];
   const seen = new Set();
 
+  // O Instagram permite fixar (pin) até 3 posts no topo do perfil, fora de
+  // ordem cronológica — eles aparecem antes dos demais na 1ª página. Sem
+  // tratamento, um post fixado antigo dispara o corte de data antes mesmo de
+  // processar os posts recentes que vêm depois dele.
+  const MAX_PINNED = 3;
+  let pinnedSkipped = 0;
+  let sawInRangePost = false;
+
   while (more && pagesFetched < maxPages && !reachedCutoff) {
     if (pagesFetched > 0) await sleep(1200);
     let conn;
@@ -280,9 +288,16 @@ async function collectViaGraphql({
       const node = edge.node;
       // posts vêm do mais novo ao mais antigo — para quando atingir o corte
       if (cutoff && node.taken_at && node.taken_at < cutoff) {
+        // Na 1ª página, antes de qualquer post dentro do período, um post
+        // antigo provavelmente é fixado (pinned): pula em vez de cortar.
+        if (pagesFetched === 1 && !sawInRangePost && pinnedSkipped < MAX_PINNED) {
+          pinnedSkipped++;
+          continue;
+        }
         reachedCutoff = true;
         break;
       }
+      sawInRangePost = true;
       const post = itemToPost(node, username);
       if (post.shortcode && !seen.has(post.shortcode)) {
         seen.add(post.shortcode);
@@ -332,6 +347,11 @@ async function collectViaFeedV1({
   let pagesFetched = 0;
   let reachedCutoff = false;
 
+  // Mesmo tratamento de posts fixados (pinned) usado no caminho GraphQL.
+  const MAX_PINNED = 3;
+  let pinnedSkipped = 0;
+  let sawInRangePost = false;
+
   while (more && pagesFetched < maxPages && !reachedCutoff) {
     if (pagesFetched > 0) await sleep(1200);
     const page = await fetchFeedPage(userId, maxId, username);
@@ -339,9 +359,14 @@ async function collectViaFeedV1({
     let pagePosts = 0;
     for (const item of page.items) {
       if (cutoff && item.taken_at && item.taken_at < cutoff) {
+        if (pagesFetched === 1 && !sawInRangePost && pinnedSkipped < MAX_PINNED) {
+          pinnedSkipped++;
+          continue;
+        }
         reachedCutoff = true;
         break;
       }
+      sawInRangePost = true;
       const post = itemToPost(item, username);
       if (post.shortcode && !seen.has(post.shortcode)) {
         seen.add(post.shortcode);

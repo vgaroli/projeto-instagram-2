@@ -34,6 +34,17 @@ Com base na análise de engajamento:
 - KPIs do período: total de posts, engajamento médio, alcance estimado por tipo
 - Tabela de performance por tipo de conteúdo (image/video/carousel)
 - Semáforo editorial: o que está **funcionando** (verde), **neutro** (amarelo), **não funcionando** (vermelho)
+- Crescimento de seguidores no período (com base no `historico-seguidores.csv`, se disponível) — ou nota de que o histórico ainda está sendo construído
+
+### Seção 1.1: Atração vs. retenção
+
+A pergunta central deste relatório é: **as postagens ajudam a "vender" a escola?** — tanto para manter as famílias atuais engajadas quanto para atrair novas matrículas.
+
+Com base na seção "Atração vs. retenção" da análise de engajamento:
+- Qual a proporção atual de conteúdo de **Atração** (vitrine para quem não conhece a escola: diferenciais, resultados, metodologia, conquistas) vs. **Retenção** (vínculo com quem já está dentro: vida estudantil, comunicados, homenagens)
+- Qual grupo engaja mais hoje, e o que isso sugere sobre o que a comunidade quer ver
+- Se o crescimento de seguidores estiver disponível, relacione com o volume de conteúdo de Atração no mesmo período
+- Avalie se o equilíbrio atual está adequado ao objetivo da escola (se a escola precisa captar novos alunos, conteúdo de Atração insuficiente é um gap prioritário)
 
 ### Seção 2: Voz e comunicação
 
@@ -51,6 +62,8 @@ Identifique os **3-5 formatos/temas que geraram mais engajamento** com exemplos 
 - Template replicável para reuso
 
 ### Seção 4: Plano de ação
+
+Marque cada item com **[Atração]** ou **[Retenção]**, indicando se a ação visa principalmente atrair novas matrículas ou fortalecer o vínculo com a comunidade atual. Itens que servem aos dois objetivos podem ser marcados **[Ambos]**. Garanta que o plano não fique desbalanceado para um único lado — se o diagnóstico (Seção 1.1) apontou pouco conteúdo de Atração, priorize ações desse tipo.
 
 **Curto prazo (próximas 4 semanas):**
 - 3 ajustes simples que podem ser feitos imediatamente (ex: postar vídeos às terças-feiras, sempre incluir uma pergunta na legenda de eventos)
@@ -89,6 +102,7 @@ Salve como `perfil-escola-{slug}.md` na mesma pasta das análises.
 ## Critérios de qualidade
 
 - Seja **prescritivo**: use imperativos ("Publique vídeos de conquistas de alunos às terças") em vez de descritivos ("A escola tende a postar mais nos dias úteis")
+- Toda recomendação do plano de ação deve indicar seu objetivo — **[Atração]**, **[Retenção]** ou **[Ambos]** — para deixar claro como ela contribui para "vender" a escola
 - Ancore toda recomendação em dados reais das análises — cite a análise de origem
 - Evite conselhos genéricos de marketing digital — foque no contexto escolar específico (pais, alunos, comunidade local)
 - Se uma análise estiver ausente, sinaliza mas gera o perfil com o que existe

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // MCP server: exporta análise de Instagram de escola para o Firestore (maestro4edu).
 // Lê lista.csv, perfil.json e arquivos .md de análise de uma pasta e grava na
-// coleção `socialMediaAnalyses`.
+// subcoleção `escolas/{schoolId}/socialMediaAnalyses`.
 //
 // Requer workspace-key.json na raiz do projeto (service account Firebase).
 import path from "node:path";
@@ -183,8 +183,8 @@ server.registerTool(
     title: "Exportar análise de Instagram de escola para o Firestore",
     description:
       "Lê lista.csv, perfil.json e arquivos .md de análise de uma pasta e " +
-      "grava na coleção `socialMediaAnalyses` do Firestore (maestro4edu). " +
-      "Requer workspace-key.json na raiz do projeto.",
+      "grava na subcoleção `escolas/{schoolId}/socialMediaAnalyses` do " +
+      "Firestore (maestro4edu). Requer workspace-key.json na raiz do projeto.",
     inputSchema: {
       schoolId: z
         .string()
@@ -244,7 +244,11 @@ server.registerTool(
         analyses,
       });
 
-      const ref = await db.collection("socialMediaAnalyses").add(doc);
+      const ref = await db
+        .collection("escolas")
+        .doc(schoolId)
+        .collection("socialMediaAnalyses")
+        .add(doc);
 
       return {
         content: [
@@ -254,7 +258,7 @@ server.registerTool(
               `Análise exportada com sucesso!\n` +
               `schoolId: ${schoolId}\n` +
               `accountName: @${accountName.replace(/^@/, "")}\n` +
-              `Documento Firestore: socialMediaAnalyses/${ref.id}\n` +
+              `Documento Firestore: escolas/${schoolId}/socialMediaAnalyses/${ref.id}\n` +
               `Posts exportados: ${doc.summary.totalPosts}\n` +
               `Engajamento médio: ${doc.summary.avgEngagementRate}%\n` +
               `Análises qualitativas incluídas: ${

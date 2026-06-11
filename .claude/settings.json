@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3)",
+      "Bash(python3 -c \"import csv; print\\(sum\\(1 for _ in csv.DictReader\\(open\\('lista.csv', encoding='utf-8'\\)\\)\\)\\)\")",
+      "Bash(set PYTHONIOENCODING=utf-8)",
+      "Bash(python3 -c ' *)",
+      "mcp__firestore-export__exportar_analise_escola",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

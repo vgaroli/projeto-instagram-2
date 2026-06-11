@@ -26,6 +26,47 @@ function perfilPathFor(username) {
   return path.join(OUTPUT_BASE, username, "perfil.json");
 }
 
+function historicoPathFor(username) {
+  return path.join(OUTPUT_BASE, username, "historico-seguidores.csv");
+}
+
+const HISTORICO_HEADER = "data,seguidores,seguindo,total_media,posts_no_arquivo";
+
+// Acrescenta um registro diário de seguidores/posts para permitir, no futuro,
+// analisar a evolução do alcance (atração de novos seguidores) ao longo do tempo.
+async function appendHistoricoSeguidores(username, perfil, postsNoArquivo) {
+  const historicoPath = historicoPathFor(username);
+  const data = perfil.fetchedAt.slice(0, 10); // YYYY-MM-DD
+  const linha = [
+    data,
+    perfil.followerCount ?? "",
+    perfil.followingCount ?? "",
+    perfil.totalMedia ?? "",
+    postsNoArquivo,
+  ].join(",");
+
+  let existing = "";
+  try {
+    existing = await fs.readFile(historicoPath, "utf8");
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
+
+  if (!existing) {
+    await fs.mkdir(path.dirname(historicoPath), { recursive: true });
+    await fs.writeFile(historicoPath, `${HISTORICO_HEADER}\n${linha}\n`, "utf8");
+    return historicoPath;
+  }
+
+  // Se já houver um registro do mesmo dia, substitui (evita duplicar em re-execuções).
+  const lines = existing.trimEnd().split("\n");
+  const header = lines[0];
+  const rows = lines.slice(1).filter((l) => !l.startsWith(`${data},`));
+  rows.push(linha);
+  await fs.writeFile(historicoPath, [header, ...rows].join("\n") + "\n", "utf8");
+  return historicoPath;
+}
+
 async function runForAccount(username, daysBack, maxPages) {
   const logs = [];
   const onLog = (m) => logs.push(m);
@@ -54,6 +95,9 @@ async function runForAccount(username, daysBack, maxPages) {
   await fs.mkdir(path.dirname(perfilPath), { recursive: true });
   await fs.writeFile(perfilPath, JSON.stringify(perfil, null, 2), "utf8");
 
+  // Registra o snapshot de seguidores no histórico (uma linha por dia de coleta)
+  const historicoPath = await appendHistoricoSeguidores(username, perfil, merged.length);
+
   return {
     username,
     followerCount: result.followerCount,
@@ -65,6 +109,7 @@ async function runForAccount(username, daysBack, maxPages) {
     erros: result.errors,
     arquivoCsv: csvPath,
     arquivoPerfil: perfilPath,
+    arquivoHistorico: historicoPath,
     logs,
   };
 }
@@ -82,7 +127,9 @@ server.registerTool(
       "Acessa a API pública do Instagram e coleta TODOS os posts (imagens, vídeos " +
       "e carrosséis) dos últimos N dias de uma conta pública. Calcula a taxa de " +
       "engajamento (curtidas + comentários / seguidores × 100) para cada post. " +
-      "Salva resources/posts/<conta>/lista.csv e perfil.json.",
+      "Salva resources/posts/<conta>/lista.csv, perfil.json e acrescenta um " +
+      "registro diário em historico-seguidores.csv (para análise futura de " +
+      "crescimento/atração de seguidores).",
     inputSchema: {
       username: z
         .string()
@@ -122,7 +169,8 @@ server.registerTool(
               `Páginas: ${summary.paginasPercorridas}. ` +
               `Erros: ${summary.erros.length}.\n` +
               `CSV: ${summary.arquivoCsv}\n` +
-              `Perfil: ${summary.arquivoPerfil}\n\n` +
+              `Perfil: ${summary.arquivoPerfil}\n` +
+              `Histórico de seguidores: ${summary.arquivoHistorico}\n\n` +
               JSON.stringify(summary, null, 2),
           },
         ],

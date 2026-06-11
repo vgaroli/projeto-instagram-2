@@ -52,19 +52,24 @@ Agrupe por dia da semana e por faixa horária (coluna `taken_at`):
 
 ### 5. Análise de temas das legendas
 
-Para cada post com legenda, classifique em uma das categorias:
+Para cada post com legenda, classifique em uma das categorias e na respectiva **função**:
 
-| Categoria | Exemplos |
-|---|---|
-| **Evento** | festa junina, formatura, olimpíada, feira de ciências, excursão |
-| **Conquista** | premiação, aprovação vestibular, resultado de olimpíada, campeão |
-| **Pedagógico** | projeto de sala, metodologia, atividade didática |
-| **Vida estudantil** | recreio, amizade, dia a dia, esportes, clubes |
-| **Institucional** | comunicado, calendário, matrícula, reunião de pais |
-| **Homenagem** | professores, funcionários, datas comemorativas (Dia das Mães, etc.) |
-| **Sem legenda / inconclusivo** | posts sem texto ou texto muito curto |
+| Categoria | Função | Exemplos |
+|---|---|---|
+| **Evento** | Ambos | festa junina, formatura, olimpíada, feira de ciências, excursão |
+| **Conquista** | Atração | premiação, aprovação vestibular, resultado de olimpíada, campeão |
+| **Pedagógico** | Atração | projeto de sala, metodologia, atividade didática |
+| **Vida estudantil** | Retenção | recreio, amizade, dia a dia, esportes, clubes |
+| **Institucional** | Retenção | comunicado, calendário, matrícula, reunião de pais |
+| **Homenagem** | Retenção | professores, funcionários, datas comemorativas (Dia das Mães, etc.) |
+| **Sem legenda / inconclusivo** | — | posts sem texto ou texto muito curto |
 
-Calcule o engajamento médio por categoria.
+A coluna **Função** indica o papel do conteúdo na "venda" da escola:
+- **Atração**: serve de vitrine para quem ainda não conhece a escola — diferenciais, resultados, metodologia, conquistas. É o tipo de post que convenceria um pai/mãe de fora a considerar matricular o filho.
+- **Retenção**: fortalece o vínculo com quem já está na comunidade (alunos, famílias atuais) — mostra que a escola valoriza quem já é de dentro.
+- **Ambos**: pode cumprir as duas funções dependendo do enquadramento da legenda (ex: um evento pode ser só registro interno ou pode destacar algo que diferencia a escola).
+
+Calcule o engajamento médio por categoria **e** por função (Atração / Retenção / Ambos).
 
 ### 6. Correlação qualidade vs. engajamento
 
@@ -72,6 +77,14 @@ Identifique padrões:
 - Posts com legenda mais longa tendem a engajar mais ou menos?
 - Posts com emoji na legenda têm padrão diferente?
 - Posts com chamada para ação (perguntas, "marque um amigo", "comente abaixo") performam diferente?
+
+### 7. Crescimento de seguidores (se houver histórico)
+
+Se existir o arquivo `historico-seguidores.csv` na pasta (gerado pelo MCP `instagram-posts` a cada coleta, com colunas `data,seguidores,seguindo,total_media,posts_no_arquivo`):
+- Compare o primeiro e o último registro: variação absoluta e percentual de seguidores no período
+- Se houver 3+ registros, indique a tendência (crescimento constante, estagnado, oscilante)
+- Tente cruzar picos/quedas de crescimento com o volume e o tipo de conteúdo postado no mesmo período (ex: mais posts de "Conquista" no mês com maior crescimento)
+- Se houver apenas 1 registro, informe que ainda não há dados suficientes para análise de tendência e que o histórico será construído nas próximas coletas
 
 ---
 
@@ -96,13 +109,19 @@ Gere um arquivo Markdown com as seções:
 [Melhores dias e horários, análise do ritmo de postagem]
 
 ## Desempenho por tema
-[Tabela: tema | qtd posts | eng. médio % | exemplo de melhor post]
+[Tabela: tema | função (atração/retenção/ambos) | qtd posts | eng. médio % | exemplo de melhor post]
+
+## Atração vs. retenção
+[Comparativo de engajamento médio entre conteúdo de Atração, Retenção e Ambos; o que isso sugere sobre o equilíbrio atual da conta]
 
 ## Correlações de legenda
 [Achados sobre legendas longas vs. curtas, CTAs, emojis]
 
+## Crescimento de seguidores
+[Evolução de seguidores com base no historico-seguidores.csv, se disponível; ou nota de que o histórico está sendo iniciado]
+
 ## Recomendações
-[5-7 recomendações específicas e acionáveis para a escola]
+[5-7 recomendações específicas e acionáveis para a escola, indicando para cada uma se o foco é atração de novos alunos ou retenção/vínculo com a comunidade atual]
 ```
 
 ---
@@ -114,3 +133,4 @@ Gere um arquivo Markdown com as seções:
 - Se uma categoria tiver menos de 3 posts, não generalize — sinalize que a amostra é pequena
 - As recomendações devem ser específicas para o contexto escolar (não genéricas de marketing)
 - Se `engagement_rate` estiver zerado para todos os posts (followerCount ausente), informe e calcule manualmente usando o `followerCount` de `perfil.json`
+- Crescimento de seguidores é um sinal indireto de atração (sofre influência de fatores externos à conta) — trate como indício, não como prova isolada, e sempre cruze com o conteúdo publicado no período
